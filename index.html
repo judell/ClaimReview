@@ -1,0 +1,109 @@
+<html>
+<head>
+<style>
+body { font-family:arial; margin:.5in; }
+#formContainer { display:flex; justify-content: space-evenly }
+.formLabel { font-weight: bold; }
+.formMessage { font-size:smaller }
+</style>
+
+<script src="https://jonudell.info/hlib/hlib.js"></script>
+
+</head>
+
+<body>
+
+<div id="formContainer">
+  <div id="userContainer"></div>
+  <div id="groupContainer"></div>
+  <div id="tokenContainer"></div>
+</div>
+
+<div id="viewer"></div>
+
+<div id="postButton"></div>
+
+<p id="status"></p>
+
+<script>
+
+var data = {}
+
+var iframeHTML;
+
+
+// create initial partly-filled-in claimReview
+function postAnno() {
+
+	debugger;
+
+	var claimReview = {
+		claimReview: {
+			claimReviewed: data.claim,
+			itemReviewed: {
+				author: {
+					name: '[NAME OF PERSON MAKING CLAIM]',
+  				sameAs: data.url,
+				}
+			},
+			reviewRating: {
+        "alternateName": "[alternateName]",				
+			},
+		}
+	};
+
+	var payload = createAnnotationPayload(
+		data.url,
+		data.claim,
+		getUser(),
+		getGroup(),
+		iframeHTML,
+		['claimReview'],
+		claimReview,
+		);
+	var token = getToken();
+  postAnnotation(payload, token, 'status', 'annotations:query:tag:claimReview');
+}
+
+// Step 2. (For previous step 1, see gather.js) 
+// Launched by the bookmarklet in Step 1.
+// Collects info needed to post an annotation: token, user, group.
+// Prompts to review the URL and selected statement that will initialize a ClaimReview object in the annotation.
+// Forms an annotation that targets the URL and selected statement.
+// For the annotation's body, writes an iframe tag that will render the app used to display/edit the ClaimReview object.
+// Posts the annotation, using query syntax to focus the ensuing redirect 
+// (For next step 3, see iframe.py.)
+
+function app() {
+
+	data.url = decodeURIComponent(gup('url'));
+	data.claim = decodeURIComponent(gup('claim'));
+  token = getToken()
+	iframeHTML = `<iframe src="https://hyp.jonudell.info/claimReview?user=${getUser()}"></iframe>`;
+
+	var tokenContainer = getById('tokenContainer');
+	createApiTokenInputForm(tokenContainer);
+
+	var groupContainer = getById('groupContainer');
+	createGroupInputForm(groupContainer);
+
+	var userContainer = getById('userContainer');
+	createUserInputForm(userContainer);
+
+	var urlAndQuote =  `
+<p><b>url</b>: ${data.url}</p>
+<p><b>claim</b>: ${data.claim}</p>`;
+
+	viewer.innerHTML = urlAndQuote;
+	}
+
+	var buttonHTML = `<div id="postButton"><button onclick="postAnno()">continue</button></div>`;
+	var button = getById('postButton');
+	button.innerHTML = buttonHTML;
+
+app();
+
+</script>
+
+</body>
+</html>
