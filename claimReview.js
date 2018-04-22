@@ -12,19 +12,19 @@ function update() {
   var opts = {
     method: 'get',
     url: url,
-  }
+  };
 
   opts.headers = {
-      'Authorization': 'Bearer ' + token,
-      'Content-Type': 'application/json;charset=utf-8',
-    };
+    'Authorization': 'Bearer ' + token,
+    'Content-Type': 'application/json;charset=utf-8',
+  };
 
   httpRequest(opts)
     .then( function(data) {
-       var payload = JSON.parse(data.response);
-       payload.extra.claimReview.itemReviewed.author.name = author;
-       payload.extra.claimReview.reviewRating.alternateName = rating;
-       updateAnnotation(id, token, JSON.stringify(payload));
-     });
+      var payload = JSON.parse(data.response);
+      payload.extra.claimReview.itemReviewed.author.name = author;
+      payload.extra.claimReview.reviewRating.alternateName = rating;
+      updateAnnotation(id, token, JSON.stringify(payload));
+    });
 
 }

@@ -1,6 +1,6 @@
 var data = {}
 
- /*
+/*
  Step 1. 
 
  This script expects to be launched, from a bookmarklet, on a page with a selected statement that will be the subject
@@ -10,7 +10,7 @@ var data = {}
  that posts an annotation initialized with this data as extra JSON.
 
  Next step: see index.html.
- */
+*/
 
 function gather() {
 
@@ -22,7 +22,6 @@ function gather() {
   data.url = encodeURIComponent(location.href);
   data.claim = '';
   var range = selection.getRangeAt(0);
-  var startTextNode, endTextNode;
   if ( range.startContainer === range.endContainer ) {
     data.claim += range.startContainer.textContent.slice(range.startOffset, range.endOffset);
   }
@@ -48,9 +47,9 @@ function gather() {
 // http://stackoverflow.com/questions/4398526/how-can-i-find-all-text-nodes-between-to-element-nodes-with-javascript-jquery
 function getTextNodesBetween(selection) {
   var range = selection.getRangeAt(0), rootNode = range.commonAncestorContainer,
-      startNode = range.startContainer, endNode = range.endContainer,
-      startOffset = range.startOffset, endOffset = range.endOffset,
-      pastStartNode = false, reachedEndNode = false, textNodes = [];
+    startNode = range.startContainer, endNode = range.endContainer,
+    startOffset = range.startOffset, endOffset = range.endOffset,
+    pastStartNode = false, reachedEndNode = false, textNodes = [];
   function getTextNodes(node) {
     var val = node.nodeValue;
     if(node == startNode && node == endNode && node !== rootNode) {
@@ -68,7 +67,7 @@ function getTextNodesBetween(selection) {
       }
     }
     for(var i = 0, len = node.childNodes.length; !reachedEndNode && i < len; ++i) {
-//      if(node !== sumterDialog) getTextNodes(node.childNodes[i]);
+      //      if(node !== sumterDialog) getTextNodes(node.childNodes[i]);
       getTextNodes(node.childNodes[i]);
     }
   }
