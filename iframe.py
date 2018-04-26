@@ -97,7 +97,7 @@ def ratingSelector(rating):
       <select id="rating">
       <option>---</option>
     """
-    for option in ['True', 'False', 'Misleading', 'PantsOnFire']:
+    for option in ['True', 'False', 'Mixed Result', 'Misleading', 'PantsOnFire']:
         selected = ''
         if option == rating:
             selected = 'selected'
