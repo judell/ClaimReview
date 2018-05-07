@@ -35,12 +35,15 @@ from pyramid.config import Configurator
 from pyramid.response import Response
 
 claimReviewTemplate = """
+<!DOCTYPE html>
 <html>
 <head>
 <link rel="stylesheet" href="https://jonudell.info/h/ClaimReview/claimReview.css">
 <script src="https://jonudell.info/hlib/hlib.js"></script>
 <script src="https://jonudell.info/h/ClaimReview/claimReview.js"></script>
-<head>
+<title>annotation app</title>
+</head>
+
 <body>
 
 <div style="display:none" id="annotationId">{id}</div>
@@ -49,12 +52,12 @@ claimReviewTemplate = """
 
 <div class="field">
   claim
-  <div><input size="80" value="{claimReviewed}"></div>
+  <div><input size="60" value="{claimReviewed}"></div>
 </div>
 
 <div class="field">
   url
-  <div><input size="80" value="{urlReviewed}"></div>
+  <div><input size="60" value="{urlReviewed}"></div>
 </div>
 
 <div class="field">
@@ -67,7 +70,7 @@ claimReviewTemplate = """
   <div>
     {ratingSelect}
   </div>
-</div>
+</div>  
 
 <div>
 <button onclick="update()">update</button>
@@ -93,15 +96,13 @@ claimReviewTemplate = """
 # Wires the form's update action to the app in step 4 (claimReview.js)
 
 def ratingSelector(rating):
-    select = """
-      <select id="rating">
-      <option>---</option>
-    """
+    select = """<select id="rating">\n
+<option>---</option>\n"""
     for option in ['True', 'False', 'Mixed Result', 'Misleading', 'PantsOnFire']:
         selected = ''
         if option == rating:
             selected = 'selected'
-        select += '<option %s>%s</option>' % ( selected, option )
+        select += '<option %s>%s</option>\n' % ( selected, option )
     select += '</select>'
     return select
 
@@ -116,8 +117,12 @@ def claimReview(request):
     user = urllib.unquote(qs['user'][0])
     token = tokens[user]
     print 'user %s, id %s, token %s' % (user, id, token)
-    headers = {'Authorization':'Bearer %s' % token }    
-    data = requests.get('https://hypothes.is/api/annotations/' + id, headers=headers).json()
+    headers = {'Authorization':'Bearer %s' % token }
+    print headers
+    text = requests.get('https://hypothes.is/api/annotations/' + id, headers=headers).text
+    data = json.loads(text.decode('utf-8'))
+    print data
+    
     claimReview = data['extra']['claimReview']
     claimReviewed = claimReview['claimReviewed']
     urlReviewed = claimReview['itemReviewed']['author']['sameAs']
@@ -128,12 +133,13 @@ def claimReview(request):
     content = claimReviewTemplate.format(
         id=id,
         token=token,
-        claimReviewed=claimReviewed,
+        claimReviewed=claimReviewed.encode('utf-8'),
         author=author,
         urlReviewed=urlReviewed,
         ratingSelect=ratingSelect,
         claimReview=json.dumps(claimReview, indent=2)
-        );
+        )
+    print content
     r = Response(body=content)
     return r
 

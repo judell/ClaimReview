@@ -15,7 +15,7 @@ body { font-family:arial; margin:.5in; }
 
 <div id="formContainer">
   <div id="userContainer"></div>
-  <div id="groupContainer"></div>
+  <!--  <div id="groupContainer"></div> -->
   <div id="tokenContainer"></div>
 </div>
 
@@ -55,7 +55,7 @@ function postAnno() {
 		data.url,
 		data.claim,
 		getUser(),
-		getGroup(),
+		'__world__',
 		iframeHTML,
 		['claimReview'],
 		claimReview,
@@ -75,21 +75,18 @@ function postAnno() {
 
 function app() {
 
-	data.url = decodeURIComponent(gup('url'));
-	data.claim = decodeURIComponent(gup('claim'));
+  data.url = decodeURIComponent(gup('url'));
+  data.claim = decodeURIComponent(gup('claim'));
   token = getToken()
-	iframeHTML = `<iframe src="https://hyp.jonudell.info/claimReview?user=${getUser()}"></iframe>`;
+  iframeHTML = `<iframe src="https://hyp.jonudell.info/claimReview?user=${getUser()}"></iframe>`;
 
-	var tokenContainer = getById('tokenContainer');
-	createApiTokenInputForm(tokenContainer);
+  var tokenContainer = getById('tokenContainer');
+  createApiTokenInputForm(tokenContainer);
 
-	var groupContainer = getById('groupContainer');
-	createGroupInputForm(groupContainer, '__world__');
+  var userContainer = getById('userContainer');
+  createUserInputForm(userContainer);
 
-	var userContainer = getById('userContainer');
-	createUserInputForm(userContainer);
-
-	var urlAndQuote =  `
+  var urlAndQuote =  `
 <p><b>url</b>: ${data.url}</p>
 <p><b>claim</b>: ${data.claim}</p>`;
 

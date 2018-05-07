@@ -1,4 +1,5 @@
-// Called from a ClaimReview form that's embedded in an annotation and served at step 3 (ifrmae.py).
+// Called from a ClaimReview form that's embedded in an annotation and served at 
+// step 3 (see iframe.py).
 // Writes possibly-changed values of editable fields into the annotation's extra JSON 
 
 function update() {

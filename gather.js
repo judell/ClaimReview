@@ -85,4 +85,6 @@ function rangeChange(data1, data2) {
   return (data1.type !== data2.type || data1.focusNode !== data2.focusNode || data1.focusOffset !== data2.focusOffset);
 }
 
+debugger;
+
 gather();
