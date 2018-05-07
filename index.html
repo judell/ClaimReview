@@ -75,8 +75,7 @@ function postAnno() {
 
 function app() {
 
-  data.url = decodeURIComponent(gup('url'));
-  data.claim = decodeURIComponent(gup('claim'));
+  data = JSON.parse(decodeURIComponent(gup('data')));
   token = getToken()
   iframeHTML = `<iframe src="https://hyp.jonudell.info/claimReview?user=${getUser()}"></iframe>`;
 
