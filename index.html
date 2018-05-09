@@ -27,41 +27,31 @@ body { font-family:arial; margin:.5in; }
 
 <script>
 
-var data = {}
-
-var iframeHTML;
+var params;
 
 // create initial partly-filled-in claimReview
 function postAnno() {
-
 	debugger;
 
 	var claimReview = {
 		claimReview: {
-			claimReviewed: data.claim,
+			claimReviewed: params.exact,
 			itemReviewed: {
 				author: {
 					name: '[NAME OF PERSON MAKING CLAIM]',
-  				sameAs: data.url,
+  				sameAs: params.uri,
 				}
 			},
 			reviewRating: {
-        "alternateName": "[alternateName]",				
+                "alternateName": "[alternateName]",				
 			},
 		}
 	};
+  params.extra = claimReview;
 
-	var payload = createAnnotationPayload(
-		data.url,
-		data.claim,
-		getUser(),
-		'__world__',
-		iframeHTML,
-		['claimReview'],
-		claimReview,
-		);
-	var token = getToken();
-  postAnnotation(payload, token, 'status', 'annotations:query:tag:claimReview');
+  var payload = createAnnotationPayload(params);
+  var token = getToken();
+  postAnnotationAndRedirect(payload, token, 'annotations:query:tag:ClaimReview');
 }
 
 // Step 2. (For previous step 1, see gather.js) 
@@ -74,11 +64,12 @@ function postAnno() {
 // (For next step 3, see iframe.py.)
 
 function app() {
-
-  data = JSON.parse(decodeURIComponent(gup('data')));
-  token = getToken()
-  iframeHTML = `<iframe src="https://hyp.jonudell.info/claimReview?user=${getUser()}"></iframe>`;
-
+  params = JSON.parse(decodeURIComponent(gup('data')));
+  params.username = getUser();
+  params.group = '__world__';
+  params.tags = ['ClaimReview'];
+  params.text = `<iframe src="https://hyp.jonudell.info/claimReview?user=${params.username}"></iframe>`;
+ 
   var tokenContainer = getById('tokenContainer');
   createApiTokenInputForm(tokenContainer);
 
@@ -86,17 +77,16 @@ function app() {
   createUserInputForm(userContainer);
 
   var urlAndQuote =  `
-<p><b>url</b>: ${data.url}</p>
-<p><b>claim</b>: ${data.claim}</p>`;
+<p><b>url</b>: ${params.uri}</p>
+<p><b>claim</b>: ${params.exact}</p>`;
 
-	viewer.innerHTML = urlAndQuote;
-	}
+  getById('viewer').innerHTML = urlAndQuote;
 
-	var buttonHTML = `<div id="postButton"><button onclick="postAnno()">continue</button></div>`;
-	var button = getById('postButton');
-	button.innerHTML = buttonHTML;
+  getById('postButton').innerHTML = 
+    `<div id="postButton"><button onclick="postAnno()">continue</button></div>`;
+}
 
-app();
+  app();
 
 </script>
 

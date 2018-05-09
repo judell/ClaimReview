@@ -22,7 +22,7 @@ function gather() {
 
   var range = selection.getRangeAt(0);
   var quoteSelector = anchoring.TextQuoteAnchor.fromRange(document.body, range);
-  var claim = quoteSelector.exact;
+  var exact = quoteSelector.exact;
   var prefix = quoteSelector.prefix;
 
   var positionSelector = anchoring.TextPositionAnchor.fromRange(document.body, range);
@@ -30,8 +30,8 @@ function gather() {
   var end = positionSelector.end;
 
   var data = {
-    url: location.href,
-    claim: claim,
+    uri: location.href,
+    exact: exact,
     prefix: prefix,
     start: start,
     end: end,
