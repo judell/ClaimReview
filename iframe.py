@@ -39,7 +39,7 @@ claimReviewTemplate = """
 <html>
 <head>
 <link rel="stylesheet" href="https://jonudell.info/h/ClaimReview/claimReview.css">
-<script src="https://jonudell.info/hlib/hlib.js"></script>
+<script src="https://jonudell.info/hlib/hlib.bundle.js"></script>
 <script src="https://jonudell.info/h/ClaimReview/claimReview.js"></script>
 <title>annotation app</title>
 </head>

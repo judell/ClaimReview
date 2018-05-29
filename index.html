@@ -7,7 +7,7 @@ body { font-family:arial; margin:.5in; }
 .formMessage { font-size:smaller }
 </style>
 
-<script src="https://jonudell.info/hlib/hlib.js"></script>
+<script src="https://jonudell.info/hlib/hlib.bundle.js"></script>
 
 </head>
 
@@ -49,9 +49,9 @@ function postAnno() {
 	};
   params.extra = claimReview;
 
-  var payload = createAnnotationPayload(params);
-  var token = getToken();
-  postAnnotationAndRedirect(payload, token, 'annotations:query:tag:ClaimReview');
+  var payload = hlib.createAnnotationPayload(params);
+  var token = hlib.getToken();
+  hlib.postAnnotationAndRedirect(payload, token, 'annotations:query:tag:ClaimReview');
 }
 
 // Step 2. (For previous step 1, see gather.js) 
@@ -64,25 +64,25 @@ function postAnno() {
 // (For next step 3, see iframe.py.)
 
 function app() {
-  params = JSON.parse(decodeURIComponent(gup('data')));
-  params.username = getUser();
+  params = JSON.parse(decodeURIComponent(hlib.gup('data')));
+  params.username = hlib.getUser();
   params.group = '__world__';
   params.tags = ['ClaimReview'];
   params.text = `<iframe src="https://hyp.jonudell.info/claimReview?user=${params.username}"></iframe>`;
  
-  var tokenContainer = getById('tokenContainer');
-  createApiTokenInputForm(tokenContainer);
+  var tokenContainer = hlib.getById('tokenContainer');
+  hlib.createApiTokenInputForm(tokenContainer);
 
-  var userContainer = getById('userContainer');
-  createUserInputForm(userContainer);
+  var userContainer = hlib.getById('userContainer');
+  hlib.createUserInputForm(userContainer);
 
   var urlAndQuote =  `
 <p><b>url</b>: ${params.uri}</p>
 <p><b>claim</b>: ${params.exact}</p>`;
 
-  getById('viewer').innerHTML = urlAndQuote;
+  hlib.getById('viewer').innerHTML = urlAndQuote;
 
-  getById('postButton').innerHTML = 
+  hlib.getById('postButton').innerHTML = 
     `<div id="postButton"><button onclick="postAnno()">continue</button></div>`;
 }
 

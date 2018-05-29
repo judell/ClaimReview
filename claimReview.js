@@ -20,12 +20,12 @@ function update() {
     'Content-Type': 'application/json;charset=utf-8',
   };
 
-  httpRequest(opts)
+  hlib.httpRequest(opts)
     .then( function(data) {
       var payload = JSON.parse(data.response);
       payload.extra.claimReview.itemReviewed.author.name = author;
       payload.extra.claimReview.reviewRating.alternateName = rating;
-      updateAnnotation(id, token, JSON.stringify(payload));
+      hlib.updateAnnotation(id, token, JSON.stringify(payload));
     });
 
 }
